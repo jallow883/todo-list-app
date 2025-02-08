@@ -4,19 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const dueDateInput = document.getElementById('dueDateInput');
     const addTaskBtn = document.getElementById('addTaskBtn');
     const taskList = document.getElementById('taskList');
-    const searchInput = document.getElementById('searchInput');
-    const filterSelect = document.getElementById('filterSelect');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
 
-    // Load tasks from local storage
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.forEach(task => addTaskToDOM(task.text, task.priority, task.dueDate, task.completed, task.completionTime));
         updateProgress();
     }
 
-    // Save tasks to local storage
     function saveTasks() {
         const tasks = Array.from(taskList.children).map(li => ({
             text: li.querySelector('.task-text').textContent,
@@ -29,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateProgress();
     }
 
-    // Function to add a new task
     function addTask() {
         const taskText = taskInput.value.trim();
         const priority = prioritySelect.value;
@@ -43,12 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
         addTaskToDOM(taskText, priority, dueDate, false);
         saveTasks();
 
-        // Clear inputs
         taskInput.value = '';
         dueDateInput.value = '';
     }
 
-    // Add task to the DOM
     function addTaskToDOM(text, priority, dueDate, completed, completionTime = null) {
         const li = document.createElement('li');
         li.dataset.priority = priority;
@@ -59,9 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         taskText.textContent = text;
         taskText.classList.add('task-text');
         li.appendChild(taskText);
-
-        // Priority indicator
-        li.classList.add(`priority-${priority}`);
 
         // Due date
         if (dueDate) {
@@ -78,10 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             completionDateSpan.classList.add('completion-date');
             li.appendChild(completionDateSpan);
         }
-
-        // Button Group
-        const buttonGroup = document.createElement('div');
-        buttonGroup.classList.add('button-group');
 
         // Complete Task Button
         const completeBtn = document.createElement('button');
@@ -107,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             saveTasks();
         });
-        buttonGroup.appendChild(completeBtn);
+        li.appendChild(completeBtn);
 
         // Edit Task Button
         const editBtn = document.createElement('button');
@@ -115,12 +101,26 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.classList.add('edit-btn');
         editBtn.addEventListener('click', () => {
             const newText = prompt('Edit task:', taskText.textContent);
+            const newDueDate = prompt('Edit due date (YYYY-MM-DD):', li.dataset.dueDate);
+
             if (newText && newText.trim() !== '') {
                 taskText.textContent = newText.trim();
-                saveTasks();
             }
+            if (newDueDate) {
+                li.dataset.dueDate = newDueDate;
+                const dueDateSpan = li.querySelector('.due-date');
+                if (dueDateSpan) {
+                    dueDateSpan.textContent = `Due: ${newDueDate}`;
+                } else {
+                    const newDueDateSpan = document.createElement('span');
+                    newDueDateSpan.textContent = `Due: ${newDueDate}`;
+                    newDueDateSpan.classList.add('due-date');
+                    li.appendChild(newDueDateSpan);
+                }
+            }
+            saveTasks();
         });
-        buttonGroup.appendChild(editBtn);
+        li.appendChild(editBtn);
 
         // Delete Task Button
         const deleteBtn = document.createElement('button');
@@ -130,12 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
             taskList.removeChild(li);
             saveTasks();
         });
-        buttonGroup.appendChild(deleteBtn);
+        li.appendChild(deleteBtn);
 
-        // Append the button group to the task
-        li.appendChild(buttonGroup);
-
-        // Append the list item to the task list
         taskList.appendChild(li);
 
         if (completed) {
@@ -143,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Update progress bar
     function updateProgress() {
         const totalTasks = taskList.children.length;
         const completedTasks = Array.from(taskList.children).filter(li => li.classList.contains('completed')).length;
@@ -153,41 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
         progressText.textContent = `${progress}% Completed`;
     }
 
-    // Event listener for adding a task
     addTaskBtn.addEventListener('click', addTask);
-
-    // Allow pressing "Enter" to add a task
     taskInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             addTask();
         }
     });
 
-    // Search tasks
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        Array.from(taskList.children).forEach(li => {
-            const taskText = li.querySelector('.task-text').textContent.toLowerCase();
-            li.style.display = taskText.includes(query) ? 'flex' : 'none';
-        });
-    });
-
-    // Filter tasks
-    filterSelect.addEventListener('change', () => {
-        const filter = filterSelect.value;
-        Array.from(taskList.children).forEach(li => {
-            if (filter === 'all') {
-                li.style.display = 'flex';
-            } else if (filter === 'pending' && !li.classList.contains('completed')) {
-                li.style.display = 'flex';
-            } else if (filter === 'completed' && li.classList.contains('completed')) {
-                li.style.display = 'flex';
-            } else {
-                li.style.display = 'none';
-            }
-        });
-    });
-
-    // Load tasks on page load
     loadTasks();
 });
