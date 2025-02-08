@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load tasks from local storage
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.forEach(task => addTaskToDOM(task.text, task.priority, task.dueDate, task.completed));
+        tasks.forEach(task => addTaskToDOM(task.text, task.priority, task.dueDate, task.completed, task.completionTime));
         updateProgress();
     }
 
@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
             text: li.querySelector('.task-text').textContent,
             priority: li.dataset.priority,
             dueDate: li.dataset.dueDate,
-            completed: li.classList.contains('completed')
+            completed: li.classList.contains('completed'),
+            completionTime: li.dataset.completionTime || null
         }));
         localStorage.setItem('tasks', JSON.stringify(tasks));
         updateProgress();
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Add task to the DOM
-    function addTaskToDOM(text, priority, dueDate, completed) {
+    function addTaskToDOM(text, priority, dueDate, completed, completionTime = null) {
         const li = document.createElement('li');
         li.dataset.priority = priority;
         li.dataset.dueDate = dueDate;
@@ -66,12 +67,62 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dueDate) {
             const dueDateSpan = document.createElement('span');
             dueDateSpan.textContent = `Due: ${dueDate}`;
-            dueDateSpan.style.fontSize = '0.8rem';
-            dueDateSpan.style.color = '#666';
+            dueDateSpan.classList.add('due-date');
             li.appendChild(dueDateSpan);
         }
 
-        // Add a delete button
+        // Completion date
+        if (completed && completionTime) {
+            const completionDateSpan = document.createElement('span');
+            completionDateSpan.textContent = `Completed on: ${completionTime}`;
+            completionDateSpan.classList.add('completion-date');
+            li.appendChild(completionDateSpan);
+        }
+
+        // Button Group
+        const buttonGroup = document.createElement('div');
+        buttonGroup.classList.add('button-group');
+
+        // Complete Task Button
+        const completeBtn = document.createElement('button');
+        completeBtn.textContent = 'Complete';
+        completeBtn.classList.add('complete-btn');
+        completeBtn.addEventListener('click', () => {
+            li.classList.toggle('completed');
+            if (li.classList.contains('completed')) {
+                const now = new Date();
+                const formattedTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+                li.dataset.completionTime = formattedTime;
+
+                const completionDateSpan = document.createElement('span');
+                completionDateSpan.textContent = `Completed on: ${formattedTime}`;
+                completionDateSpan.classList.add('completion-date');
+                li.appendChild(completionDateSpan);
+            } else {
+                li.dataset.completionTime = null;
+                const completionDateSpan = li.querySelector('.completion-date');
+                if (completionDateSpan) {
+                    li.removeChild(completionDateSpan);
+                }
+            }
+            saveTasks();
+        });
+        buttonGroup.appendChild(completeBtn);
+
+        // Edit Task Button
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.classList.add('edit-btn');
+        editBtn.addEventListener('click', () => {
+            const newText = prompt('Edit task:', taskText.textContent);
+            if (newText && newText.trim() !== '') {
+                taskText.textContent = newText.trim();
+                saveTasks();
+            }
+        });
+        buttonGroup.appendChild(editBtn);
+
+        // Delete Task Button
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete';
         deleteBtn.classList.add('delete-btn');
@@ -79,15 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
             taskList.removeChild(li);
             saveTasks();
         });
+        buttonGroup.appendChild(deleteBtn);
 
-        // Mark task as completed when clicked
-        li.addEventListener('click', () => {
-            li.classList.toggle('completed');
-            saveTasks();
-        });
-
-        // Append the delete button to the list item
-        li.appendChild(deleteBtn);
+        // Append the button group to the task
+        li.appendChild(buttonGroup);
 
         // Append the list item to the task list
         taskList.appendChild(li);
