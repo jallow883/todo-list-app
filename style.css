@@ -1,0 +1,188 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9fafb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    background: white;
+    width: 400px;
+    max-width: 90%;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+#taskInput {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#taskInput:focus {
+    border-color: #6366f1;
+}
+
+#prioritySelect, #dueDateInput {
+    margin-left: 1rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+#addTaskBtn {
+    background-color: #6366f1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    margin-left: 1rem;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#addTaskBtn:hover {
+    background-color: #4f46e5;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#searchInput:focus {
+    border-color: #6366f1;
+}
+
+#filterSelect {
+    margin-left: 1rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    background: #f8fafc;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    position: relative;
+}
+
+li:hover {
+    transform: scale(1.02);
+    background-color: #edf2f7;
+}
+
+li.completed {
+    text-decoration: line-through;
+    color: #a0aec0;
+}
+
+.priority-high::before {
+    content: '!';
+    color: red;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.priority-medium::before {
+    content: '!!';
+    color: orange;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.priority-low::before {
+    content: '!!!';
+    color: green;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.delete-btn {
+    background-color: #e53e3e;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #c53030;
+}
+
+.progress-bar {
+    background-color: #e2e8f0;
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+    overflow: hidden;
+}
+
+#progressFill {
+    height: 100%;
+    width: 0%;
+    background-color: #6366f1;
+    transition: width 0.3s ease;
+}
+
+#progressText {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #666;
+}
