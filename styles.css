@@ -5,14 +5,16 @@
     box-sizing: border-box;
 }
 
-body {
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto; /* Ensure scrolling when content overflows */
     font-family: 'Poppins', sans-serif;
     background-color: #f9fafb;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
 }
 
 .container {
@@ -22,6 +24,11 @@ body {
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    max-height: 80vh; /* Limit the container's height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1 {
@@ -115,6 +122,13 @@ h1 {
 
 ul {
     list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-height: 300px; /* Set a maximum height for the task list */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #e2e8f0; /* Optional: Add a border for better visibility */
+    border-radius: 5px;
 }
 
 li {
@@ -123,7 +137,7 @@ li {
     margin-bottom: 0.5rem;
     border-radius: 5px;
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
     transition: transform 0.2s ease, background-color 0.2s ease;
@@ -227,13 +241,11 @@ li.completed .task-text {
 
 /* Responsive Design */
 @media (max-width: 600px) {
-    .input-container {
-        flex-direction: column;
-        align-items: flex-start;
+    .container {
+        max-height: 70vh; /* Reduce the container height on smaller screens */
     }
 
-    #taskInput, #prioritySelect, #dueDateInput, #addTaskBtn {
-        width: 100%;
-        margin-bottom: 0.5rem;
+    ul {
+        max-height: 200px; /* Reduce the task list height on smaller screens */
     }
 }
