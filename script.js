@@ -108,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (newDueDate) {
                 li.dataset.dueDate = newDueDate;
+
+                // Update the due date span in the DOM
                 const dueDateSpan = li.querySelector('.due-date');
                 if (dueDateSpan) {
                     dueDateSpan.textContent = `Due: ${newDueDate}`;
