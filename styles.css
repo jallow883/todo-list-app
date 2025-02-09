@@ -189,9 +189,10 @@ li.completed .task-text {
 
 /* Button Group Styling */
 .button-group {
-    display: flex;
+    display: flex; /* Arrange buttons horizontally */
     gap: 0.5rem; /* Space between buttons */
-    margin-top: 0.5rem;
+    margin-top: 0.5rem; /* Space above the button group */
+    align-items: center; /* Align buttons vertically */
 }
 
 .delete-btn, .complete-btn, .edit-btn {
