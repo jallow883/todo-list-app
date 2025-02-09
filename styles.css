@@ -246,14 +246,9 @@ li.completed .task-text {
 }
 
 /* Styles for Urgent Tasks */
-li.urgent .task-text {
-    font-weight: bold;
-    color: green;
-}
-
 li.urgent::before {
     content: 'URGENT!';
-    color: red;
+    color: red; /* Red color for the "URGENT" label */
     font-weight: bold;
     margin-right: 0.5rem;
 }
