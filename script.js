@@ -2,13 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskInput = document.getElementById('taskInput');
     const prioritySelect = document.getElementById('prioritySelect');
     const dueDateInput = document.getElementById('dueDateInput');
-    const categorySelect = document.getElementById('categorySelect'); // New: Category dropdown
+    const categorySelect = document.getElementById('categorySelect');
     const addTaskBtn = document.getElementById('addTaskBtn');
     const taskList = document.getElementById('taskList');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
-    const searchInput = document.getElementById('searchInput'); // Search input
-    const filterSelect = document.getElementById('filterSelect'); // Filter dropdown
+    const searchInput = document.getElementById('searchInput');
+    const filterSelect = document.getElementById('filterSelect');
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -16,11 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
             task.text,
             task.priority,
             task.dueDate,
-            task.category, // New: Category
+            task.category,
             task.completed,
             task.completionTime
         ));
         updateProgress();
+        sortTasksByDueDate(); // Sort tasks after loading
     }
 
     function saveTasks() {
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             text: li.querySelector('.task-text').textContent,
             priority: li.dataset.priority,
             dueDate: li.dataset.dueDate,
-            category: li.dataset.category, // New: Save category
+            category: li.dataset.category,
             completed: li.classList.contains('completed'),
             completionTime: li.dataset.completionTime || null
         }));
@@ -40,23 +41,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const taskText = taskInput.value.trim();
         const priority = prioritySelect.value;
         const dueDate = dueDateInput.value;
-        const category = categorySelect.value; // New: Get category
+        const category = categorySelect.value;
+
         if (taskText === '') {
             alert('Please enter a task!');
             return;
         }
+
         addTaskToDOM(taskText, priority, dueDate, category, false);
         saveTasks();
         taskInput.value = '';
         dueDateInput.value = '';
+        sortTasksByDueDate(); // Sort tasks after adding a new one
     }
 
     function addTaskToDOM(text, priority, dueDate, category, completed, completionTime = null) {
         const li = document.createElement('li');
         li.dataset.priority = priority;
         li.dataset.dueDate = dueDate;
-        li.dataset.category = category; // New: Store category
-        li.classList.add(`priority-${priority}`); // For styling based on priority
+        li.dataset.category = category;
 
         // Task text
         const taskText = document.createElement('span');
@@ -121,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.addEventListener('click', () => {
             const newText = prompt('Edit task:', taskText.textContent);
             const newDueDate = prompt('Edit due date (YYYY-MM-DD):', li.dataset.dueDate || '');
-            const newCategory = prompt('Edit category:', li.dataset.category || ''); // New: Edit category
+            const newCategory = prompt('Edit category:', li.dataset.category || '');
 
             if (newText && newText.trim() !== '') {
                 taskText.textContent = newText.trim();
@@ -151,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             saveTasks();
+            sortTasksByDueDate(); // Sort tasks after editing
         });
         li.appendChild(editBtn);
 
@@ -161,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteBtn.addEventListener('click', () => {
             taskList.removeChild(li);
             saveTasks();
+            sortTasksByDueDate(); // Sort tasks after deleting
         });
         li.appendChild(deleteBtn);
 
@@ -177,6 +182,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
         progressFill.style.width = `${progress}%`;
         progressText.textContent = `${progress}% Completed`;
+    }
+
+    function sortTasksByDueDate() {
+        const tasksArray = Array.from(taskList.children);
+
+        // Sort tasks by due date (earliest first)
+        tasksArray.sort((a, b) => {
+            const dateA = a.dataset.dueDate ? new Date(a.dataset.dueDate) : Infinity; // No due date goes last
+            const dateB = b.dataset.dueDate ? new Date(b.dataset.dueDate) : Infinity;
+            return dateA - dateB;
+        });
+
+        // Re-append sorted tasks to the DOM
+        tasksArray.forEach(task => taskList.appendChild(task));
     }
 
     // Search Functionality
