@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
             task.completionTime
         ));
         updateProgress();
+        sortTasksByDueDate(); // Sort tasks by due date after loading
+        markEarliestTaskAsUrgent(); // Mark the earliest task as urgent
     }
 
     function saveTasks() {
@@ -49,6 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         saveTasks();
         taskInput.value = '';
         dueDateInput.value = '';
+        sortTasksByDueDate(); // Sort tasks after adding a new one
+        markEarliestTaskAsUrgent(); // Update the "URGENT" label
     }
 
     function addTaskToDOM(text, priority, dueDate, category, completed, completionTime = null) {
@@ -108,6 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             saveTasks();
+            sortTasksByDueDate(); // Re-sort tasks after completing
+            markEarliestTaskAsUrgent(); // Update the "URGENT" label
         });
 
         // Edit Task Button
@@ -147,6 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             saveTasks();
+            sortTasksByDueDate(); // Re-sort tasks after editing
+            markEarliestTaskAsUrgent(); // Update the "URGENT" label
         });
 
         // Delete Task Button
@@ -156,6 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteBtn.addEventListener('click', () => {
             taskList.removeChild(li);
             saveTasks();
+            sortTasksByDueDate(); // Re-sort tasks after deleting
+            markEarliestTaskAsUrgent(); // Update the "URGENT" label
         });
 
         // Create a button group container
@@ -181,6 +191,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
         progressFill.style.width = `${progress}%`;
         progressText.textContent = `${progress}% Completed`;
+    }
+
+    // Sort Tasks by Due Date
+    function sortTasksByDueDate() {
+        const tasksArray = Array.from(taskList.children);
+
+        // Sort tasks by due date (earliest first)
+        tasksArray.sort((a, b) => {
+            const dateA = a.dataset.dueDate ? new Date(a.dataset.dueDate) : Infinity;
+            const dateB = b.dataset.dueDate ? new Date(b.dataset.dueDate) : Infinity;
+            return dateA - dateB;
+        });
+
+        // Re-append sorted tasks to the DOM
+        tasksArray.forEach(task => taskList.appendChild(task));
+    }
+
+    // Mark the Earliest Task as Urgent
+    function markEarliestTaskAsUrgent() {
+        const tasksArray = Array.from(taskList.children);
+
+        // Remove "urgent" class from all tasks
+        tasksArray.forEach(task => task.classList.remove('urgent'));
+
+        // Find the first task with a due date
+        const earliestTask = tasksArray.find(task => task.dataset.dueDate);
+
+        if (earliestTask) {
+            earliestTask.classList.add('urgent'); // Add "urgent" class
+        }
     }
 
     // Search Functionality
