@@ -253,7 +253,7 @@ li.urgent .task-text {
 
 li.urgent::before {
     content: 'URGENT!';
-    color: red;
+    color: green;
     font-weight: bold;
     margin-right: 0.5rem;
 }
