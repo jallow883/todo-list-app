@@ -2,14 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskInput = document.getElementById('taskInput');
     const prioritySelect = document.getElementById('prioritySelect');
     const dueDateInput = document.getElementById('dueDateInput');
+    const categorySelect = document.getElementById('categorySelect'); // New: Category dropdown
     const addTaskBtn = document.getElementById('addTaskBtn');
     const taskList = document.getElementById('taskList');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
+    const searchInput = document.getElementById('searchInput'); // Search input
+    const filterSelect = document.getElementById('filterSelect'); // Filter dropdown
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.forEach(task => addTaskToDOM(task.text, task.priority, task.dueDate, task.completed, task.completionTime));
+        tasks.forEach(task => addTaskToDOM(
+            task.text,
+            task.priority,
+            task.dueDate,
+            task.category, // New: Category
+            task.completed,
+            task.completionTime
+        ));
         updateProgress();
     }
 
@@ -18,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             text: li.querySelector('.task-text').textContent,
             priority: li.dataset.priority,
             dueDate: li.dataset.dueDate,
+            category: li.dataset.category, // New: Save category
             completed: li.classList.contains('completed'),
             completionTime: li.dataset.completionTime || null
         }));
@@ -29,23 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const taskText = taskInput.value.trim();
         const priority = prioritySelect.value;
         const dueDate = dueDateInput.value;
-
+        const category = categorySelect.value; // New: Get category
         if (taskText === '') {
             alert('Please enter a task!');
             return;
         }
-
-        addTaskToDOM(taskText, priority, dueDate, false);
+        addTaskToDOM(taskText, priority, dueDate, category, false);
         saveTasks();
-
         taskInput.value = '';
         dueDateInput.value = '';
     }
 
-    function addTaskToDOM(text, priority, dueDate, completed, completionTime = null) {
+    function addTaskToDOM(text, priority, dueDate, category, completed, completionTime = null) {
         const li = document.createElement('li');
         li.dataset.priority = priority;
         li.dataset.dueDate = dueDate;
+        li.dataset.category = category; // New: Store category
+        li.classList.add(`priority-${priority}`); // For styling based on priority
 
         // Task text
         const taskText = document.createElement('span');
@@ -59,6 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
             dueDateSpan.textContent = `Due: ${dueDate}`;
             dueDateSpan.classList.add('due-date');
             li.appendChild(dueDateSpan);
+        }
+
+        // Category
+        if (category) {
+            const categorySpan = document.createElement('span');
+            categorySpan.textContent = `Category: ${category}`;
+            categorySpan.classList.add('category');
+            li.appendChild(categorySpan);
         }
 
         // Completion date
@@ -100,35 +119,37 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.textContent = 'Edit';
         editBtn.classList.add('edit-btn');
         editBtn.addEventListener('click', () => {
-            // Prompt for the new task text
             const newText = prompt('Edit task:', taskText.textContent);
+            const newDueDate = prompt('Edit due date (YYYY-MM-DD):', li.dataset.dueDate || '');
+            const newCategory = prompt('Edit category:', li.dataset.category || ''); // New: Edit category
 
-            // Prompt for the new due date
-            const currentDueDate = li.dataset.dueDate || ''; // Default to empty string if no due date exists
-            const newDueDate = prompt('Edit due date (YYYY-MM-DD):', currentDueDate);
-
-            // Update the task text if a new value is provided
             if (newText && newText.trim() !== '') {
                 taskText.textContent = newText.trim();
             }
-
-            // Update the due date if a new value is provided
             if (newDueDate) {
-                li.dataset.dueDate = newDueDate; // Update the data attribute
-
-                // Find the due date span in the DOM
+                li.dataset.dueDate = newDueDate;
                 const dueDateSpan = li.querySelector('.due-date');
                 if (dueDateSpan) {
                     dueDateSpan.textContent = `Due: ${newDueDate}`;
                 } else {
-                    // If the span doesn't exist, create and append a new one
                     const newDueDateSpan = document.createElement('span');
                     newDueDateSpan.textContent = `Due: ${newDueDate}`;
                     newDueDateSpan.classList.add('due-date');
                     li.appendChild(newDueDateSpan);
                 }
             }
-
+            if (newCategory) {
+                li.dataset.category = newCategory;
+                const categorySpan = li.querySelector('.category');
+                if (categorySpan) {
+                    categorySpan.textContent = `Category: ${newCategory}`;
+                } else {
+                    const newCategorySpan = document.createElement('span');
+                    newCategorySpan.textContent = `Category: ${newCategory}`;
+                    newCategorySpan.classList.add('category');
+                    li.appendChild(newCategorySpan);
+                }
+            }
             saveTasks();
         });
         li.appendChild(editBtn);
@@ -154,10 +175,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalTasks = taskList.children.length;
         const completedTasks = Array.from(taskList.children).filter(li => li.classList.contains('completed')).length;
         const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-
         progressFill.style.width = `${progress}%`;
         progressText.textContent = `${progress}% Completed`;
     }
+
+    // Search Functionality
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        Array.from(taskList.children).forEach(li => {
+            const taskText = li.querySelector('.task-text').textContent.toLowerCase();
+            li.style.display = taskText.includes(query) ? 'flex' : 'none';
+        });
+    });
+
+    // Filter Functionality
+    filterSelect.addEventListener('change', () => {
+        const filter = filterSelect.value;
+        Array.from(taskList.children).forEach(li => {
+            if (filter === 'all') {
+                li.style.display = 'flex';
+            } else if (filter === 'pending' && !li.classList.contains('completed')) {
+                li.style.display = 'flex';
+            } else if (filter === 'completed' && li.classList.contains('completed')) {
+                li.style.display = 'flex';
+            } else {
+                li.style.display = 'none';
+            }
+        });
+    });
 
     addTaskBtn.addEventListener('click', addTask);
     taskInput.addEventListener('keypress', (e) => {
