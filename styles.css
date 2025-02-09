@@ -253,6 +253,12 @@ li.urgent::before {
     margin-right: 0.5rem;
 }
 
+/* Ensure task text color remains unchanged */
+li.urgent .task-text {
+    color: inherit; /* Inherit the default text color */
+    font-weight: normal; /* Ensure no bold styling is applied */
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
