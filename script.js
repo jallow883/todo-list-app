@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const filterSelect = document.getElementById('filterSelect');
 
+    // New Sorting Buttons
+    const sortByDateBtn = document.getElementById('sortByDateBtn');
+    const sortByPriorityBtn = document.getElementById('sortByPriorityBtn');
+
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.forEach(task => addTaskToDOM(
@@ -21,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             task.completionTime
         ));
         updateProgress();
-        sortTasksByDueDate(); // Sort tasks after loading
+        sortTasksByDueDate(); // Default sorting by due date
     }
 
     function saveTasks() {
@@ -192,12 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
         progressText.textContent = `${progress}% Completed`;
     }
 
+    // Sort by Due Date
     function sortTasksByDueDate() {
         const tasksArray = Array.from(taskList.children);
 
         // Sort tasks by due date (earliest first)
         tasksArray.sort((a, b) => {
-            const dateA = a.dataset.dueDate ? new Date(a.dataset.dueDate) : Infinity; // No due date goes last
+            const dateA = a.dataset.dueDate ? new Date(a.dataset.dueDate) : Infinity;
             const dateB = b.dataset.dueDate ? new Date(b.dataset.dueDate) : Infinity;
             return dateA - dateB;
         });
@@ -207,6 +212,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Mark the earliest task as urgent
         markEarliestTaskAsUrgent();
+    }
+
+    // Sort by Priority
+    function sortTasksByPriority() {
+        const tasksArray = Array.from(taskList.children);
+
+        // Define priority order
+        const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+
+        // Sort tasks by priority
+        tasksArray.sort((a, b) => {
+            const priorityA = priorityOrder[a.dataset.priority] || Infinity; // Default to lowest priority
+            const priorityB = priorityOrder[b.dataset.priority] || Infinity;
+            return priorityA - priorityB;
+        });
+
+        // Re-append sorted tasks to the DOM
+        tasksArray.forEach(task => taskList.appendChild(task));
     }
 
     function markEarliestTaskAsUrgent() {
@@ -247,6 +270,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Event Listeners for Sorting Buttons
+    sortByDateBtn.addEventListener('click', sortTasksByDueDate);
+    sortByPriorityBtn.addEventListener('click', sortTasksByPriority);
 
     addTaskBtn.addEventListener('click', addTask);
     taskInput.addEventListener('keypress', (e) => {
