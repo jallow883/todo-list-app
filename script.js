@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const filterSelect = document.getElementById('filterSelect');
 
-    // Sorting Button
-    const sortByDateBtn = document.getElementById('sortByDateBtn');
-
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.forEach(task => addTaskToDOM(
@@ -24,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
             task.completionTime
         ));
         updateProgress();
-        sortTasksByDueDate(); // Default sorting by due date
     }
 
     function saveTasks() {
@@ -55,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         saveTasks();
         taskInput.value = '';
         dueDateInput.value = '';
-        sortTasksByDueDate(); // Sort tasks after adding a new one
     }
 
     function addTaskToDOM(text, priority, dueDate, category, completed, completionTime = null) {
@@ -123,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             saveTasks();
-            sortTasksByDueDate(); // Sort tasks after completing
         });
 
         // Edit Task Button
@@ -163,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             saveTasks();
-            sortTasksByDueDate(); // Sort tasks after editing
         });
 
         // Delete Task Button
@@ -173,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteBtn.addEventListener('click', () => {
             taskList.removeChild(li);
             saveTasks();
-            sortTasksByDueDate(); // Sort tasks after deleting
         });
 
         // Create a button group container
@@ -201,38 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
         progressText.textContent = `${progress}% Completed`;
     }
 
-    // Sort by Due Date
-    function sortTasksByDueDate() {
-        const tasksArray = Array.from(taskList.children);
-
-        // Sort tasks by due date (earliest first)
-        tasksArray.sort((a, b) => {
-            const dateA = a.dataset.dueDate ? new Date(a.dataset.dueDate) : Infinity;
-            const dateB = b.dataset.dueDate ? new Date(b.dataset.dueDate) : Infinity;
-            return dateA - dateB;
-        });
-
-        // Re-append sorted tasks to the DOM
-        tasksArray.forEach(task => taskList.appendChild(task));
-
-        // Mark the earliest task as urgent
-        markEarliestTaskAsUrgent();
-    }
-
-    function markEarliestTaskAsUrgent() {
-        const tasksArray = Array.from(taskList.children);
-
-        // Remove "urgent" class from all tasks
-        tasksArray.forEach(task => task.classList.remove('urgent'));
-
-        // Find the first task with a due date
-        const earliestTask = tasksArray.find(task => task.dataset.dueDate);
-
-        if (earliestTask) {
-            earliestTask.classList.add('urgent'); // Add "urgent" class
-        }
-    }
-
     // Search Functionality
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
@@ -257,9 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    // Event Listener for Sorting Button
-    sortByDateBtn.addEventListener('click', sortTasksByDueDate);
 
     addTaskBtn.addEventListener('click', addTask);
     taskInput.addEventListener('keypress', (e) => {
