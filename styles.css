@@ -187,9 +187,10 @@ li.completed .task-text {
     margin-top: 0.5rem;
 }
 
+/* Button Group Styling */
 .button-group {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.5rem; /* Space between buttons */
     margin-top: 0.5rem;
 }
 
@@ -201,6 +202,8 @@ li.completed .task-text {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 0.9rem; /* Slightly smaller font for compactness */
+    flex-shrink: 0; /* Prevent buttons from shrinking too much */
 }
 
 .complete-btn {
