@@ -65,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
         li.dataset.dueDate = dueDate;
         li.dataset.category = category;
 
+        // Priority Label
+        const priorityLabel = document.createElement('span');
+        priorityLabel.textContent = priority;
+        priorityLabel.classList.add('priority-label', `priority-${priority.toLowerCase()}`);
+        li.appendChild(priorityLabel);
+
         // Task text
         const taskText = document.createElement('span');
         taskText.textContent = text;
@@ -228,59 +234,4 @@ document.addEventListener('DOMContentLoaded', () => {
             return priorityA - priorityB;
         });
 
-        // Re-append sorted tasks to the DOM
-        tasksArray.forEach(task => taskList.appendChild(task));
-    }
-
-    function markEarliestTaskAsUrgent() {
-        const tasksArray = Array.from(taskList.children);
-
-        // Remove "urgent" class from all tasks
-        tasksArray.forEach(task => task.classList.remove('urgent'));
-
-        // Find the first task with a due date
-        const earliestTask = tasksArray.find(task => task.dataset.dueDate);
-
-        if (earliestTask) {
-            earliestTask.classList.add('urgent'); // Add "urgent" class
-        }
-    }
-
-    // Search Functionality
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        Array.from(taskList.children).forEach(li => {
-            const taskText = li.querySelector('.task-text').textContent.toLowerCase();
-            li.style.display = taskText.includes(query) ? 'flex' : 'none';
-        });
-    });
-
-    // Filter Functionality
-    filterSelect.addEventListener('change', () => {
-        const filter = filterSelect.value;
-        Array.from(taskList.children).forEach(li => {
-            if (filter === 'all') {
-                li.style.display = 'flex';
-            } else if (filter === 'pending' && !li.classList.contains('completed')) {
-                li.style.display = 'flex';
-            } else if (filter === 'completed' && li.classList.contains('completed')) {
-                li.style.display = 'flex';
-            } else {
-                li.style.display = 'none';
-            }
-        });
-    });
-
-    // Event Listeners for Sorting Buttons
-    sortByDateBtn.addEventListener('click', sortTasksByDueDate);
-    sortByPriorityBtn.addEventListener('click', sortTasksByPriority);
-
-    addTaskBtn.addEventListener('click', addTask);
-    taskInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            addTask();
-        }
-    });
-
-    loadTasks();
-});
+        // Re-append sorted tasks to
