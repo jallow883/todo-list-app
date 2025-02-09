@@ -62,7 +62,7 @@ h1 {
     border-color: #6366f1;
 }
 
-#prioritySelect, #dueDateInput {
+#prioritySelect, #dueDateInput, #categorySelect {
     padding: 0.75rem;
     border: 1px solid #e2e8f0;
     border-radius: 5px;
@@ -181,6 +181,12 @@ li.completed .task-text {
     margin-top: 0.5rem;
 }
 
+.category {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
 .button-group {
     display: flex;
     gap: 0.5rem;
@@ -239,12 +245,24 @@ li.completed .task-text {
     color: #666;
 }
 
+/* Styles for Urgent Tasks */
+li.urgent .task-text {
+    font-weight: bold;
+    color: red;
+}
+
+li.urgent::before {
+    content: 'URGENT!';
+    color: red;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
         max-height: 70vh; /* Reduce the container height on smaller screens */
     }
-
     ul {
         max-height: 200px; /* Reduce the task list height on smaller screens */
     }
