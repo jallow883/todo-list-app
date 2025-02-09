@@ -96,6 +96,32 @@ h1 {
     justify-content: space-between;
     margin-bottom: 1.5rem;
     gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+
+#filterSelect {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: auto;
+}
+
+#sortByDateBtn, #sortByPriorityBtn {
+    background-color: #6366f1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 0.5rem;
+}
+
+#sortByDateBtn:hover, #sortByPriorityBtn:hover {
+    background-color: #4f46e5;
 }
 
 #searchInput {
@@ -106,18 +132,12 @@ h1 {
     font-size: 1rem;
     outline: none;
     transition: border-color 0.3s ease;
+    margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 #searchInput:focus {
     border-color: #6366f1;
-}
-
-#filterSelect {
-    padding: 0.75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 5px;
-    font-size: 1rem;
-    width: auto;
 }
 
 ul {
@@ -187,12 +207,10 @@ li.completed .task-text {
     margin-top: 0.5rem;
 }
 
-/* Button Group Styling */
 .button-group {
-    display: flex; /* Arrange buttons horizontally */
-    gap: 0.5rem; /* Space between buttons */
-    margin-top: 0.5rem; /* Space above the button group */
-    align-items: center; /* Align buttons vertically */
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .delete-btn, .complete-btn, .edit-btn {
@@ -203,8 +221,8 @@ li.completed .task-text {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 0.9rem; /* Slightly smaller font for compactness */
-    flex-shrink: 0; /* Prevent buttons from shrinking too much */
+    font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 .complete-btn {
@@ -233,6 +251,7 @@ li.completed .task-text {
     border-radius: 5px;
     margin-top: 1.5rem;
     overflow: hidden;
+    width: 100%;
 }
 
 #progressFill {
@@ -252,23 +271,22 @@ li.completed .task-text {
 /* Styles for Urgent Tasks */
 li.urgent::before {
     content: 'URGENT!';
-    color: red; /* Red color for the "URGENT" label */
+    color: red;
     font-weight: bold;
     margin-right: 0.5rem;
 }
 
-/* Ensure task text color remains unchanged */
 li.urgent .task-text {
-    color: inherit; /* Inherit the default text color */
-    font-weight: normal; /* Ensure no bold styling is applied */
+    color: inherit;
+    font-weight: normal;
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
-        max-height: 70vh; /* Reduce the container height on smaller screens */
+        max-height: 70vh;
     }
     ul {
-        max-height: 200px; /* Reduce the task list height on smaller screens */
+        max-height: 200px;
     }
 }
