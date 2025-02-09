@@ -100,26 +100,35 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.textContent = 'Edit';
         editBtn.classList.add('edit-btn');
         editBtn.addEventListener('click', () => {
+            // Prompt for the new task text
             const newText = prompt('Edit task:', taskText.textContent);
-            const newDueDate = prompt('Edit due date (YYYY-MM-DD):', li.dataset.dueDate);
 
+            // Prompt for the new due date
+            const currentDueDate = li.dataset.dueDate || ''; // Default to empty string if no due date exists
+            const newDueDate = prompt('Edit due date (YYYY-MM-DD):', currentDueDate);
+
+            // Update the task text if a new value is provided
             if (newText && newText.trim() !== '') {
                 taskText.textContent = newText.trim();
             }
-            if (newDueDate) {
-                li.dataset.dueDate = newDueDate;
 
-                // Update the due date span in the DOM
+            // Update the due date if a new value is provided
+            if (newDueDate) {
+                li.dataset.dueDate = newDueDate; // Update the data attribute
+
+                // Find the due date span in the DOM
                 const dueDateSpan = li.querySelector('.due-date');
                 if (dueDateSpan) {
                     dueDateSpan.textContent = `Due: ${newDueDate}`;
                 } else {
+                    // If the span doesn't exist, create and append a new one
                     const newDueDateSpan = document.createElement('span');
                     newDueDateSpan.textContent = `Due: ${newDueDate}`;
                     newDueDateSpan.classList.add('due-date');
                     li.appendChild(newDueDateSpan);
                 }
             }
+
             saveTasks();
         });
         li.appendChild(editBtn);
