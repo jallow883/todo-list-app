@@ -10,9 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const filterSelect = document.getElementById('filterSelect');
 
-    // Sorting Buttons
+    // Sorting Button
     const sortByDateBtn = document.getElementById('sortByDateBtn');
-    const sortByPriorityBtn = document.getElementById('sortByPriorityBtn');
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -220,18 +219,54 @@ document.addEventListener('DOMContentLoaded', () => {
         markEarliestTaskAsUrgent();
     }
 
-    // Sort by Priority
-    function sortTasksByPriority() {
+    function markEarliestTaskAsUrgent() {
         const tasksArray = Array.from(taskList.children);
 
-        // Define priority order
-        const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+        // Remove "urgent" class from all tasks
+        tasksArray.forEach(task => task.classList.remove('urgent'));
 
-        // Sort tasks by priority
-        tasksArray.sort((a, b) => {
-            const priorityA = priorityOrder[a.dataset.priority] || Infinity; // Default to lowest priority
-            const priorityB = priorityOrder[b.dataset.priority] || Infinity;
-            return priorityA - priorityB;
+        // Find the first task with a due date
+        const earliestTask = tasksArray.find(task => task.dataset.dueDate);
+
+        if (earliestTask) {
+            earliestTask.classList.add('urgent'); // Add "urgent" class
+        }
+    }
+
+    // Search Functionality
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        Array.from(taskList.children).forEach(li => {
+            const taskText = li.querySelector('.task-text').textContent.toLowerCase();
+            li.style.display = taskText.includes(query) ? 'flex' : 'none';
         });
+    });
 
-        // Re-append sorted tasks to
+    // Filter Functionality
+    filterSelect.addEventListener('change', () => {
+        const filter = filterSelect.value;
+        Array.from(taskList.children).forEach(li => {
+            if (filter === 'all') {
+                li.style.display = 'flex';
+            } else if (filter === 'pending' && !li.classList.contains('completed')) {
+                li.style.display = 'flex';
+            } else if (filter === 'completed' && li.classList.contains('completed')) {
+                li.style.display = 'flex';
+            } else {
+                li.style.display = 'none';
+            }
+        });
+    });
+
+    // Event Listener for Sorting Button
+    sortByDateBtn.addEventListener('click', sortTasksByDueDate);
+
+    addTaskBtn.addEventListener('click', addTask);
+    taskInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            addTask();
+        }
+    });
+
+    loadTasks();
+});
