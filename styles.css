@@ -174,25 +174,27 @@ li.completed .task-text {
     color: #a0aec0;
 }
 
-.priority-high::before {
-    content: '!';
-    color: red;
+.priority-label {
     font-weight: bold;
     margin-right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.9rem;
 }
 
-.priority-medium::before {
-    content: '!!';
-    color: orange;
-    font-weight: bold;
-    margin-right: 0.5rem;
+.priority-high {
+    background-color: #ffebee; /* Light red background */
+    color: #c62828; /* Dark red text */
 }
 
-.priority-low::before {
-    content: '!!!';
-    color: green;
-    font-weight: bold;
-    margin-right: 0.5rem;
+.priority-medium {
+    background-color: #fff3e0; /* Light orange background */
+    color: #ef6c00; /* Dark orange text */
+}
+
+.priority-low {
+    background-color: #e8f5e9; /* Light green background */
+    color: #2e7d32; /* Dark green text */
 }
 
 .due-date, .completion-date {
