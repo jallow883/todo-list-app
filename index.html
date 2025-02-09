@@ -3,52 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced To-Do List</title>
+    <title>To-Do List</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
 </head>
 <body>
     <div class="container">
-        <h1>To-Do List</h1>
-
-        <!-- Input Section -->
+        <h1>Sally's To-Do List</h1>
+        <!-- Task Input Section -->
         <div class="input-container">
-            <input type="text" id="taskInput" placeholder="Enter task...">
+            <input type="text" id="taskInput" placeholder="Add a new task...">
             <select id="prioritySelect">
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+            <select id="categorySelect"> <!-- New: Category Dropdown -->
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <option value="shopping">Shopping</option>
+                <option value="other">Other</option>
             </select>
             <input type="date" id="dueDateInput">
-            <select id="categorySelect">
-                <option value="Work">Work</option>
-                <option value="Personal">Personal</option>
-                <option value="Other">Other</option>
-            </select>
             <button id="addTaskBtn">+</button>
         </div>
-
-        <!-- Filter Buttons -->
+        <!-- Search & Filter Section -->
         <div class="filter-container">
+            <input type="text" id="searchInput" placeholder="Search tasks...">
             <select id="filterSelect">
                 <option value="all">All</option>
                 <option value="pending">Pending</option>
                 <option value="completed">Completed</option>
             </select>
         </div>
-
-        <!-- Search Bar -->
-        <input type="text" id="searchInput" placeholder="Search tasks...">
-
         <!-- Task List -->
         <ul id="taskList"></ul>
-
         <!-- Progress Bar -->
         <div class="progress-bar">
             <div id="progressFill"></div>
         </div>
         <p id="progressText">0% Completed</p>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
