@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('taskList');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
-    const searchInput = document.getElementById('searchInput');
-    const filterSelect = document.getElementById('filterSelect');
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -85,14 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
             categorySpan.textContent = `Category: ${category}`;
             categorySpan.classList.add('category');
             li.appendChild(categorySpan);
-        }
-
-        // Completion date
-        if (completed && completionTime) {
-            const completionDateSpan = document.createElement('span');
-            completionDateSpan.textContent = `Completed on: ${completionTime}`;
-            completionDateSpan.classList.add('completion-date');
-            li.appendChild(completionDateSpan);
         }
 
         // Complete Task Button
@@ -194,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Search Functionality
+    const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
         Array.from(taskList.children).forEach(li => {
@@ -203,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Filter Functionality
+    const filterSelect = document.getElementById('filterSelect');
     filterSelect.addEventListener('change', () => {
         const filter = filterSelect.value;
         Array.from(taskList.children).forEach(li => {
@@ -218,7 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Event Listener for Add Task Button
     addTaskBtn.addEventListener('click', addTask);
+
+    // Allow pressing "Enter" to add a task
     taskInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             addTask();
