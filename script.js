@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const filterSelect = document.getElementById('filterSelect');
 
-    // New Sorting Buttons
+    // Sorting Buttons
     const sortByDateBtn = document.getElementById('sortByDateBtn');
     const sortByPriorityBtn = document.getElementById('sortByPriorityBtn');
 
