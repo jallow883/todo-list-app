@@ -1,3 +1,287 @@
+To update the **CSS** and **JavaScript** files, I'll incorporate all the features discussed so far, including sorting tasks by due date, marking the earliest task as urgent, and ensuring the "URGENT" label appears in red without affecting the task text color. Below are the fully updated files:
+
+---
+
+### **Updated CSS File**
+
+```css
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto; /* Ensure scrolling when content overflows */
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9fafb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: white;
+    width: 400px;
+    max-width: 90%;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    max-height: 80vh; /* Limit the container's height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+#taskInput {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#taskInput:focus {
+    border-color: #6366f1;
+}
+
+#prioritySelect, #dueDateInput, #categorySelect {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: auto;
+}
+
+#dueDateInput {
+    min-width: 120px;
+    flex-shrink: 0;
+}
+
+#addTaskBtn {
+    background-color: #6366f1;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+}
+
+#addTaskBtn:hover {
+    background-color: #4f46e5;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+}
+
+#searchInput {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#searchInput:focus {
+    border-color: #6366f1;
+}
+
+#filterSelect {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: auto;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-height: 300px; /* Set a maximum height for the task list */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #e2e8f0; /* Optional: Add a border for better visibility */
+    border-radius: 5px;
+}
+
+li {
+    background: #f8fafc;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    position: relative;
+}
+
+li:hover {
+    transform: scale(1.02);
+    background-color: #edf2f7;
+}
+
+li.completed .task-text {
+    text-decoration: line-through;
+    color: #a0aec0;
+}
+
+.priority-high::before {
+    content: '!';
+    color: red;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.priority-medium::before {
+    content: '!!';
+    color: orange;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.priority-low::before {
+    content: '!!!';
+    color: green;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.due-date, .completion-date {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.category {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.delete-btn, .complete-btn, .edit-btn {
+    background-color: #6366f1;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.complete-btn {
+    background-color: #28a745;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+}
+
+.delete-btn:hover {
+    background-color: #c53030;
+}
+
+.complete-btn:hover {
+    background-color: #218838;
+}
+
+.edit-btn:hover {
+    background-color: #e0a800;
+}
+
+.progress-bar {
+    background-color: #e2e8f0;
+    height: 10px;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+    overflow: hidden;
+}
+
+#progressFill {
+    height: 100%;
+    width: 0%;
+    background-color: #6366f1;
+    transition: width 0.3s ease;
+}
+
+#progressText {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Styles for Urgent Tasks */
+li.urgent::before {
+    content: 'URGENT!';
+    color: red; /* Red color for the "URGENT" label */
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* Ensure task text color remains unchanged */
+li.urgent .task-text {
+    color: inherit; /* Inherit the default text color */
+    font-weight: normal; /* Ensure no bold styling is applied */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        max-height: 70vh; /* Reduce the container height on smaller screens */
+    }
+    ul {
+        max-height: 200px; /* Reduce the task list height on smaller screens */
+    }
+}
+```
+
+---
+
+### **Updated JavaScript File**
+
+```javascript
 document.addEventListener('DOMContentLoaded', () => {
     const taskInput = document.getElementById('taskInput');
     const prioritySelect = document.getElementById('prioritySelect');
@@ -236,17 +520,4 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (filter === 'completed' && li.classList.contains('completed')) {
                 li.style.display = 'flex';
             } else {
-                li.style.display = 'none';
-            }
-        });
-    });
-
-    addTaskBtn.addEventListener('click', addTask);
-    taskInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            addTask();
-        }
-    });
-
-    loadTasks();
-});
+                li.style.display = '
