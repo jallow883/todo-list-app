@@ -108,7 +108,7 @@ h1 {
     width: auto;
 }
 
-#sortByDateBtn, #sortByPriorityBtn {
+#sortByDateBtn {
     background-color: #6366f1;
     color: white;
     border: none;
@@ -120,7 +120,7 @@ h1 {
     margin-right: 0.5rem;
 }
 
-#sortByDateBtn:hover, #sortByPriorityBtn:hover {
+#sortByDateBtn:hover {
     background-color: #4f46e5;
 }
 
