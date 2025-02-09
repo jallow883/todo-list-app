@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             saveTasks();
+            sortTasksByDueDate(); // Sort tasks after completing
         });
         li.appendChild(completeBtn);
 
@@ -196,6 +197,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Re-append sorted tasks to the DOM
         tasksArray.forEach(task => taskList.appendChild(task));
+
+        // Mark the earliest task as urgent
+        markEarliestTaskAsUrgent();
+    }
+
+    function markEarliestTaskAsUrgent() {
+        const tasksArray = Array.from(taskList.children);
+
+        // Remove "urgent" class from all tasks
+        tasksArray.forEach(task => task.classList.remove('urgent'));
+
+        // Find the first task with a due date
+        const earliestTask = tasksArray.find(task => task.dataset.dueDate);
+
+        if (earliestTask) {
+            earliestTask.classList.add('urgent'); // Add "urgent" class
+        }
     }
 
     // Search Functionality
