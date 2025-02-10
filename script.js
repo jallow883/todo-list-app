@@ -7,6 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('taskList');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
+    const toggleThemeBtn = document.getElementById('toggleThemeBtn'); // Theme toggle button
+
+    // Check if dark mode is enabled in localStorage
+    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+
+    // Apply the saved theme on page load
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        toggleThemeBtn.textContent = 'Toggle Light Mode';
+    } else {
+        document.body.classList.remove('dark-mode');
+        toggleThemeBtn.textContent = 'Toggle Dark Mode';
+    }
+
+    // Toggle theme on button click
+    toggleThemeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        // Save the user's preference in localStorage
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'enabled');
+            toggleThemeBtn.textContent = 'Toggle Light Mode';
+        } else {
+            localStorage.setItem('darkMode', 'disabled');
+            toggleThemeBtn.textContent = 'Toggle Dark Mode';
+        }
+    });
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
