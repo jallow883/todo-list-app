@@ -7,6 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('taskList');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
+    const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+
+    // Check if dark mode is enabled in localStorage
+    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+
+    // Apply the saved theme on page load
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
+    } else {
+        document.body.classList.remove('dark-mode');
+        toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
+    }
+
+    // Toggle theme on button click
+    toggleThemeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        // Save the user's preference in localStorage
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'enabled');
+            toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
+        } else {
+            localStorage.setItem('darkMode', 'disabled');
+            toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
+        }
+    });
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -108,27 +135,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Move the completed task to the bottom of the list
                 taskList.appendChild(li);
-
-                // Re-sort tasks after completing
-                sortTasksByDueDate();
-
-                // Mark the new earliest task as urgent
-                markEarliestTaskAsUrgent();
             } else {
                 li.dataset.completionTime = null;
                 const completionDateSpan = li.querySelector('.completion-date');
                 if (completionDateSpan) {
                     li.removeChild(completionDateSpan);
                 }
-
-                // Re-sort tasks after un-completing
-                sortTasksByDueDate();
-
-                // Mark the new earliest task as urgent
-                markEarliestTaskAsUrgent();
             }
 
             saveTasks();
+            sortTasksByDueDate(); // Re-sort tasks after completing/un-completing
+            markEarliestTaskAsUrgent(); // Update the "URGENT" label
         });
 
         // Edit Task Button
@@ -212,15 +229,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function sortTasksByDueDate() {
         const tasksArray = Array.from(taskList.children);
 
-        // Sort tasks by due date (earliest first)
-        tasksArray.sort((a, b) => {
+        // Separate completed and pending tasks
+        const completedTasks = tasksArray.filter(li => li.classList.contains('completed'));
+        const pendingTasks = tasksArray.filter(li => !li.classList.contains('completed'));
+
+        // Sort only pending tasks by due date (earliest first)
+        pendingTasks.sort((a, b) => {
             const dateA = a.dataset.dueDate ? new Date(a.dataset.dueDate) : Infinity;
             const dateB = b.dataset.dueDate ? new Date(b.dataset.dueDate) : Infinity;
             return dateA - dateB;
         });
 
-        // Re-append sorted tasks to the DOM
-        tasksArray.forEach(task => taskList.appendChild(task));
+        // Append sorted pending tasks first, then completed tasks
+        pendingTasks.concat(completedTasks).forEach(task => taskList.appendChild(task));
     }
 
     // Mark the Earliest Task as Urgent
