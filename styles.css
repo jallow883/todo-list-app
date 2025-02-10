@@ -126,8 +126,10 @@ ul {
 }
 
 li {
-    display: flex; /* Use flexbox for layout */
-    align-items: center; /* Align items vertically */
+    position: relative; /* Required for positioning the priority icon */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start; /* Align items to the left */
     background: #f8fafc;
     padding: 1rem;
     margin-bottom: 0.5rem;
@@ -140,13 +142,22 @@ li:hover {
     background-color: #edf2f7;
 }
 
+.priority-icon-container {
+    position: absolute; /* Position the icon container absolutely */
+    top: 0.5rem; /* Adjust vertical position */
+    right: 0.5rem; /* Adjust horizontal position */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .priority-icon {
     font-size: 1.2rem; /* Increase icon size */
-    margin-right: 1rem; /* Add spacing between the icon and task text */
     padding: 0.25rem;
 }
 
 .task-text {
+    margin-top: 0.5rem; /* Add spacing below the priority icon */
     flex: 1; /* Allow task text to take up available space */
 }
 
@@ -165,7 +176,7 @@ li:hover {
 .button-group {
     display: flex;
     gap: 0.5rem;
-    margin-left: 1rem; /* Add spacing between buttons and other elements */
+    margin-top: 0.5rem; /* Add spacing between buttons and other elements */
 }
 
 .delete-btn, .complete-btn, .edit-btn {
