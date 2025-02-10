@@ -12,6 +12,8 @@ html, body {
     overflow: auto; /* Ensure scrolling when content overflows */
     font-family: 'Poppins', sans-serif;
     background-color: #f9fafb;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,14 +31,34 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 h1 {
     text-align: center;
-    color: #333;
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
     font-weight: 600;
+}
+
+.theme-toggle {
+    margin-bottom: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+#toggleThemeBtn {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #6366f1;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#toggleThemeBtn:hover {
+    background-color: #4f46e5;
 }
 
 .input-container {
@@ -100,7 +122,7 @@ h1 {
     width: 100%;
 }
 
-#filterSelect {
+#filterSelect, #searchInput {
     padding: 0.75rem;
     border: 1px solid #e2e8f0;
     border-radius: 5px;
@@ -110,18 +132,6 @@ h1 {
 
 #searchInput {
     flex: 1;
-    padding: 0.75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 5px;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s ease;
-    margin-bottom: 1.5rem;
-    width: 100%;
-}
-
-#searchInput:focus {
-    border-color: #6366f1;
 }
 
 ul {
@@ -265,6 +275,49 @@ li.urgent::before {
 li.urgent .task-text {
     color: inherit;
     font-weight: normal;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode .container {
+    background: #1e1e1e;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1), 0 1px 3px rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode li {
+    background: #2e2e2e;
+}
+
+body.dark-mode .priority-high {
+    background-color: #4a1414;
+    color: #ffcdd2;
+}
+
+body.dark-mode .priority-medium {
+    background-color: #4e342e;
+    color: #ffab91;
+}
+
+body.dark-mode .priority-low {
+    background-color: #2e3c2e;
+    color: #a5d6a7;
+}
+
+body.dark-mode .button-group button {
+    background-color: #bb86fc;
+    color: #121212;
+}
+
+body.dark-mode .progress-bar {
+    background-color: #333;
+}
+
+body.dark-mode #progressFill {
+    background-color: #bb86fc;
 }
 
 /* Responsive Design */
