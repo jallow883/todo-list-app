@@ -7,6 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('taskList');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
+    const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+
+    // Check if dark mode is enabled in localStorage
+    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
+
+    // Apply the saved theme on page load
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
+    } else {
+        document.body.classList.remove('dark-mode');
+        toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
+    }
+
+    // Toggle theme on button click
+    toggleThemeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        // Save the user's preference in localStorage
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'enabled');
+            toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
+        } else {
+            localStorage.setItem('darkMode', 'disabled');
+            toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
+        }
+    });
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -61,6 +88,22 @@ document.addEventListener('DOMContentLoaded', () => {
         li.dataset.dueDate = dueDate;
         li.dataset.category = category;
 
+        // Priority Icon (on the top-right corner)
+        const priorityIconContainer = document.createElement('div');
+        priorityIconContainer.classList.add('priority-icon-container'); // Add class for styling
+
+        const priorityIcon = document.createElement('span');
+        priorityIcon.classList.add('priority-icon'); // Add class for styling
+        if (priority === 'High') {
+            priorityIcon.textContent = '🔴'; // Red circle for High
+        } else if (priority === 'Medium') {
+            priorityIcon.textContent = '🟡'; // Yellow circle for Medium
+        } else if (priority === 'Low') {
+            priorityIcon.textContent = '🟢'; // Green circle for Low
+        }
+        priorityIconContainer.appendChild(priorityIcon);
+        li.appendChild(priorityIconContainer);
+
         // Task text
         const taskText = document.createElement('span');
         taskText.textContent = text;
@@ -82,18 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
             categorySpan.classList.add('category');
             li.appendChild(categorySpan);
         }
-
-        // Priority Icon (on the right side)
-        const priorityIcon = document.createElement('span');
-        priorityIcon.classList.add('priority-icon'); // Add class for styling
-        if (priority === 'High') {
-            priorityIcon.textContent = '🔴'; // Red circle for High
-        } else if (priority === 'Medium') {
-            priorityIcon.textContent = '🟡'; // Yellow circle for Medium
-        } else if (priority === 'Low') {
-            priorityIcon.textContent = '🟢'; // Green circle for Low
-        }
-        li.appendChild(priorityIcon);
 
         // Complete Task Button
         const completeBtn = document.createElement('button');
