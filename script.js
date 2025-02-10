@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Apply the saved theme on page load
     if (isDarkMode) {
         document.body.classList.add('dark-mode');
-        toggleThemeBtn.textContent = 'Toggle Light Mode';
+        toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
     } else {
         document.body.classList.remove('dark-mode');
-        toggleThemeBtn.textContent = 'Toggle Dark Mode';
+        toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
     }
 
     // Toggle theme on button click
@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Save the user's preference in localStorage
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('darkMode', 'enabled');
-            toggleThemeBtn.textContent = 'Toggle Light Mode';
+            toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
         } else {
             localStorage.setItem('darkMode', 'disabled');
-            toggleThemeBtn.textContent = 'Toggle Dark Mode';
+            toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
         }
     });
 
