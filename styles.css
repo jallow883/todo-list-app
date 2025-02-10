@@ -41,27 +41,6 @@ h1 {
     font-weight: 600;
 }
 
-.theme-toggle {
-    margin-bottom: 1rem;
-    width: 100%;
-    text-align: center;
-}
-
-#toggleThemeBtn {
-    padding: 0.75rem 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #6366f1;
-    color: white;
-    cursor: pointer;
-    font-size: 1.5rem; /* Increase size for better visibility of icons */
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-#toggleThemeBtn:hover {
-    background-color: #4f46e5;
-}
-
 .input-container {
     display: flex;
     justify-content: space-between;
@@ -147,16 +126,14 @@ ul {
 }
 
 li {
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space between task text and priority icon */
     background: #f8fafc;
     padding: 1rem;
     margin-bottom: 0.5rem;
     border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
     transition: transform 0.2s ease, background-color 0.2s ease;
-    position: relative;
 }
 
 li:hover {
@@ -164,32 +141,15 @@ li:hover {
     background-color: #edf2f7;
 }
 
-li.completed .task-text {
-    text-decoration: line-through;
-    color: #a0aec0;
+.task-text {
+    flex: 1; /* Allow task text to take up available space */
+    margin-right: 1rem; /* Add spacing between task text and priority icon */
 }
 
-.priority-label {
-    font-weight: bold;
-    margin-right: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 3px;
-    font-size: 0.9rem;
-}
-
-.priority-high {
-    background-color: #ffebee; /* Light red background */
-    color: #c62828; /* Dark red text */
-}
-
-.priority-medium {
-    background-color: #fff3e0; /* Light orange background */
-    color: #ef6c00; /* Dark orange text */
-}
-
-.priority-low {
-    background-color: #e8f5e9; /* Light green background */
-    color: #2e7d32; /* Dark green text */
+.priority-icon {
+    font-size: 1.2rem; /* Increase icon size */
+    margin-left: auto; /* Push the icon to the right */
+    padding: 0.25rem;
 }
 
 .due-date, .completion-date {
@@ -207,7 +167,7 @@ li.completed .task-text {
 .button-group {
     display: flex;
     gap: 0.5rem;
-    margin-top: 0.5rem;
+    margin-left: 1rem; /* Add spacing between buttons and other elements */
 }
 
 .delete-btn, .complete-btn, .edit-btn {
@@ -291,21 +251,6 @@ body.dark-mode .container {
 
 body.dark-mode li {
     background: #2e2e2e;
-}
-
-body.dark-mode .priority-high {
-    background-color: #4a1414;
-    color: #ffcdd2;
-}
-
-body.dark-mode .priority-medium {
-    background-color: #4e342e;
-    color: #ffab91;
-}
-
-body.dark-mode .priority-low {
-    background-color: #2e3c2e;
-    color: #a5d6a7;
 }
 
 body.dark-mode .button-group button {
