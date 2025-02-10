@@ -128,7 +128,6 @@ ul {
 li {
     display: flex; /* Use flexbox for layout */
     align-items: center; /* Align items vertically */
-    justify-content: space-between; /* Space between task text and priority icon */
     background: #f8fafc;
     padding: 1rem;
     margin-bottom: 0.5rem;
@@ -141,15 +140,14 @@ li:hover {
     background-color: #edf2f7;
 }
 
-.task-text {
-    flex: 1; /* Allow task text to take up available space */
-    margin-right: 1rem; /* Add spacing between task text and priority icon */
-}
-
 .priority-icon {
     font-size: 1.2rem; /* Increase icon size */
-    margin-left: auto; /* Push the icon to the right */
+    margin-right: 1rem; /* Add spacing between the icon and task text */
     padding: 0.25rem;
+}
+
+.task-text {
+    flex: 1; /* Allow task text to take up available space */
 }
 
 .due-date, .completion-date {
