@@ -7,33 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('taskList');
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
-    const toggleThemeBtn = document.getElementById('toggleThemeBtn'); // Theme toggle button
-
-    // Check if dark mode is enabled in localStorage
-    const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
-
-    // Apply the saved theme on page load
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-        toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
-    } else {
-        document.body.classList.remove('dark-mode');
-        toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
-    }
-
-    // Toggle theme on button click
-    toggleThemeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-
-        // Save the user's preference in localStorage
-        if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('darkMode', 'enabled');
-            toggleThemeBtn.textContent = '🌙'; // Moon icon for dark mode
-        } else {
-            localStorage.setItem('darkMode', 'disabled');
-            toggleThemeBtn.textContent = '☀️'; // Sun icon for light mode
-        }
-    });
 
     function loadTasks() {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -122,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         completeBtn.classList.add('complete-btn');
         completeBtn.addEventListener('click', () => {
             li.classList.toggle('completed');
+
             if (li.classList.contains('completed')) {
                 const now = new Date();
                 const formattedTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
@@ -131,16 +105,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 completionDateSpan.textContent = `Completed on: ${formattedTime}`;
                 completionDateSpan.classList.add('completion-date');
                 li.appendChild(completionDateSpan);
+
+                // Move the completed task to the bottom of the list
+                taskList.appendChild(li);
+
+                // Re-sort tasks after completing
+                sortTasksByDueDate();
+
+                // Mark the new earliest task as urgent
+                markEarliestTaskAsUrgent();
             } else {
                 li.dataset.completionTime = null;
                 const completionDateSpan = li.querySelector('.completion-date');
                 if (completionDateSpan) {
                     li.removeChild(completionDateSpan);
                 }
+
+                // Re-sort tasks after un-completing
+                sortTasksByDueDate();
+
+                // Mark the new earliest task as urgent
+                markEarliestTaskAsUrgent();
             }
+
             saveTasks();
-            sortTasksByDueDate(); // Re-sort tasks after completing
-            markEarliestTaskAsUrgent(); // Update the "URGENT" label
         });
 
         // Edit Task Button
